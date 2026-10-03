@@ -1,0 +1,40 @@
+image: node:22
+
+stages:
+  - install
+  - test
+  - build
+  - deploy
+
+install_dependencies:
+  stage: install
+  script:
+    - npm ci
+
+
+test:
+  stage: test
+  script:
+    - npx vitest run
+
+    #- npm run test:unit
+
+
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist
+
+#From ChatGPT to help trying to implement the pipeline
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying to GitLab Pages"
+  artifacts:
+    paths:
+      - dist
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
